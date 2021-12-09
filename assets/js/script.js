@@ -1,11 +1,15 @@
 // Declare constants and variables
 const positionAPIKey = '3f39be56daa79b8f85d50e3d985d6f6d';
-var city = 'Oakland';
+const cityInputEl = $('#search');
+
+var citySearched = 'Oakland';
 var cityLat;
 var cityLong;
+var breweryArray = [];
+
 
 // function to call the position API to gather the latitude and longitude of the user's search
-var callPositionAPI = function() {
+var callPositionAPI = function(city) {
     var posApiCall = `http://api.positionstack.com/v1/forward?access_key=${positionAPIKey}&query=${city}`;
     fetch(posApiCall)
         .then(response => response.json())
@@ -24,7 +28,17 @@ var callBreweryAPI = function(lat, long) {
         .then(response => response.json())
         .then(function(data) {
             console.log(data)
+            breweryArray = data;
         });
 }
 
-testPositionAPI();
+callPositionAPI(citySearched);
+
+var submitBtnClicked = function(event) {
+    event.preventDefault();
+    console.log("A submit button has been clicked!");
+    // citySearched = cityInputEl.value;
+    // callPositionAPI(citySearched);
+}
+
+$('#search-form').submit(submitBtnClicked)
