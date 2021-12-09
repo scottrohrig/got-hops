@@ -34,7 +34,8 @@ var callBreweryAPI = function(lat, long) {
 
 callPositionAPI(citySearched);
 
-var submitBtnClicked = function() {
+var submitBtnClicked = function(event) {
+    event.preventDefault();
     console.log("A submit button has been clicked!");
     // citySearched = cityInputEl.value;
     // callPositionAPI(citySearched);
