@@ -40,4 +40,4 @@ var submitBtnClicked = function() {
     // callPositionAPI(citySearched);
 }
 
-$(document).on('click', 'button', submitBtnClicked);
+$('#search-form').submit(submitBtnClicked)
