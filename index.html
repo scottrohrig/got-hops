@@ -5,6 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Got Hops</title>
+    <!-- import:  https://cdnjs.com/libraries/tailwindcss -->
+    <!-- more-info:  https://www.reddit.com/r/tailwindcss/comments/n835vw/how_to_use_tailwind_with_vanilla_htmlcssjs/ -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
@@ -20,9 +24,56 @@
         </nav>
     </header>
 
-    <!-- import:  https://cdnjs.com/libraries/tailwindcss -->
-    <!-- more-info:  https://www.reddit.com/r/tailwindcss/comments/n835vw/how_to_use_tailwind_with_vanilla_htmlcssjs/ -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <main>
+        <!-- search -->
+        <section id="search-wrapper" class="">
+            <form action="" type="submit" name="search">
+
+                <h2 id="search-title">Search</h2>
+                <input type="text" name="search" id="search" placeholder="City, State" autocomplete>
+                <button type="submit">SUBMIT</button>
+            </form>
+        </section>
+        <!-- results -->
+        <section id="results-wrapper">
+            <div id="first-result">
+                <div class="card"></div>
+            </div>
+            <div id="next-results">
+                <div class="brewery-card">
+                    <div class="flex w-full justify-content-between">
+                        <h3 class="brewery-name inline">Almanac Beer Company</h3>
+                        <div class="favorites">⭐</div>
+                    </div>
+                    <div class="img-wrapper ">
+                        <iframe src="https://oaklandunitedbeerworks.com/" scroll="no" style="width: 400px; height:400px" frameborder="0"></iframe>
+                    </div>
+                    <address class="brewery-content">
+                        <!-- TODO: clean up content formatting. add labels. -->
+                        <p class="brewery-type">micro</p>
+                        <a href="http://almanacbeer.com">http://almanacbeer.com</a>
+                        <a href="tel:+415-553-5425" class="brewery-phone">415-553-5425</a>
+                        <p class="brewery-street">651B W Tower Ave</p>
+                        <p class="brewery-city">Alameda</p>, <span class="brewery-state"></span>
+                    </address>
+                    <!-- <address>
+                        55 Main St. <br/>
+                        Some Town, Ca <br/>
+                        12345 <br/>
+                        P: 555.RUN.BUDY (555.786.2839) <br/>
+                        E: <a href="mailto:info@runbuddy.io">info@runbuddy.io</a>
+                    </address> -->
+                    
+
+                </div>
+                <div class="card">sample</div>
+                <div class="card">sample</div>
+                <div class="card">sample</div>
+            </div>
+
+        </section>
+    </main>
+
     <script src="./assets/js/script.js"></script>
 </body>
 </html>
