@@ -12,8 +12,8 @@
 
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-<!-- TODO: [ ] add background gray 200 to body -->
-<body>
+<!-- TODO: [*] add background gray 200 to body -->
+<body class="bg-gray-200">
     <header class='flex w-4/5 max-w-7xl mx-h-24 mx-auto'>
         <div class="bg-yellow-300 w-full mx-auto py-3 rounded-b-lg">
             <h1 class="text-center text-yellow-800 text-4xl font-bold">got🍻hops</h1>
@@ -24,26 +24,27 @@
         TODO:   [*] add flex properties so that search and results
                     are stacked on sm-md and side-by-side on lg devices.
     -->
-    <main class="flex flex-col lg:flex-row">
+    <main class="flex flex-col lg:flex-row w-4/5 max-w-7xl py-2 mt-5 mx-auto">
         
         
         <!-- search -->
-        <!-- 
-            TODO:   [ ] add display, bg colors, border styles, and padding to wrapper properties
-                    [ ] add full-width input styling https://v1.tailwindcss.com/components/forms
+        <!--
+            TODO:   [*] add display, bg colors, border styles, and padding to wrapper properties
+                    [*] add full-width input styling https://v1.tailwindcss.com/components/forms
                     [ ] add full-width simple button styling https://v1.tailwindcss.com/components/buttons
                     [ ] make buttons the primary yellow color with dark brown text
         -->
-        <section id="search-wrapper" class="">
+        <section id="search-wrapper" class="w-4/5 mx-auto lg:ml-auto lg: mr-2 max-w-flex bg-gray-100 rounded-lg p-2">
             <form action="" type="submit" name="search" id="search-form">
 
                 <h2 id="search-title">Search</h2>
-                <input type="text" name="search" id="search" placeholder="City, State" autocomplete>
-                <button type="submit">SUBMIT</button>
+                <button type="submit" class="">SUBMIT</button>
+                <input type="text" name="search" id="search" placeholder="City, State" autocomplete class="shadow appearance-none border rounded-lg w-full py-2 px-3 mt-2">
             </form>
         </section>
 
         <!-- results -->
+        
         <!-- 
             TODO:   
                     [ ] 1st & * results full width on sm-md; 1st takes up full width on lg, other results flex wrap maybe 3 cards
