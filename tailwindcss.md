@@ -5,6 +5,16 @@
 - It is not a UI kit and does not have default themes
 
 
+## got hops style rules
+
+### Colors
+- primary bg color:       `bg-yellow-300`
+- text color on primary:  `text-yellow-800`
+- secondary bg color:     `bg-yellow-900`
+
+- border radius:          `rounded-b-lg`
+
+
 ## Playground
 
 - [Test Out The Various Features](https://play.tailwindcss.com/)

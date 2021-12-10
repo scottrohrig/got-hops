@@ -16,6 +16,7 @@
         <div class="bg-yellow-300 w-full mx-auto py-3 rounded-b-lg">
             <h1 class="text-center text-yellow-800 text-4xl font-bold">got🍻hops</h1>
         </div>
+        <!-- TODO: remove nav -->
         <nav>
             <ul>
                 <li></li>
@@ -23,9 +24,18 @@
         </nav>
     </header>
 
+    <!-- 
+        TODO:   [ ] add flex properties so that search and results
+                    are stacked on sm-md and side-by-side on lg devices.
+    -->
     <main>
 
         <!-- search -->
+        <!-- 
+            TODO:   [ ] add display, bg colors, border styles, and padding to wrapper
+                    [ ] add full-width input styling https://v1.tailwindcss.com/components/forms
+                    [ ] add full-width simple button styling https://v1.tailwindcss.com/components/buttons
+        -->
         <section id="search-wrapper" class="">
             <form action="" type="submit" name="search" id="search-form">
 
@@ -34,10 +44,40 @@
                 <button type="submit">SUBMIT</button>
             </form>
         </section>
+
         <!-- results -->
+        <!-- 
+            TODO:   
+                    [ ] 1st & * results full width on sm-md; 1st takes up full width on lg, other results flex wrap maybe 3 cards
+                    [ ] create 'card' styling for results cards (to be added in js)
+                    [ ] make img take up top part of card full width
+                    [ ] hide overflow for image div
+                    [ ] add position-relative to parent of favorites
+                    [ ] add position-absolute to favorites top:8px rt: 8px
+                    [ ] 
+         -->
         <section id="results-wrapper">
             <div id="first-result">
-                <div class="card"></div>
+                <div class="brewery-card w-full max-w-xs ">
+                    <div class="flex w-full justify-content-between">
+                        <h3 class="brewery-name inline">Almanac Beer Company</h3>
+                        <div class="favorites">⭐</div>
+                    </div>
+                    <div class="img-wrapper w-full max-w-sm h-full max-h-md">
+                        <div class="w-full h-full bg-gray-200">
+                            <iframe src="https://oaklandunitedbeerworks.com/" scroll="no" style="width: 100%; height:100%" frameborder="0"></iframe>
+    
+                        </div>
+                    </div>
+                    <address class="brewery-content">
+                        <p class="brewery-type">micro</p>
+                        <a href="http://almanacbeer.com">http://almanacbeer.com</a>
+                        <a href="tel:+415-553-5425" class="brewery-phone">415-553-5425</a>
+                        <p class="brewery-street">651B W Tower Ave</p>
+                        <p class="brewery-city">Alameda</p>, <span class="brewery-state"></span>
+                    </address>
+    
+                </div>
             </div>
             <div id="next-results">
                 <div class="brewery-card">
@@ -49,21 +89,13 @@
                         <iframe src="https://oaklandunitedbeerworks.com/" scroll="no" style="width: 400px; height:400px" frameborder="0"></iframe>
                     </div>
                     <address class="brewery-content">
-                        <!-- TODO: clean up content formatting. add labels. -->
+                        <!-- TODO:   [ ] clean up content formatting. add labels. -->
                         <p class="brewery-type">micro</p>
                         <a href="http://almanacbeer.com">http://almanacbeer.com</a>
                         <a href="tel:+415-553-5425" class="brewery-phone">415-553-5425</a>
                         <p class="brewery-street">651B W Tower Ave</p>
                         <p class="brewery-city">Alameda</p>, <span class="brewery-state"></span>
                     </address>
-                    <!-- <address>
-                        55 Main St. <br/>
-                        Some Town, Ca <br/>
-                        12345 <br/>
-                        P: 555.RUN.BUDY (555.786.2839) <br/>
-                        E: <a href="mailto:info@runbuddy.io">info@runbuddy.io</a>
-                    </address> -->
-                    
 
                 </div>
                 <div class="card">sample</div>
