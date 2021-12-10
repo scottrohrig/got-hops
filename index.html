@@ -54,14 +54,37 @@
                     [ ] add position-absolute to favorites top:8px rt: 8px
                     [ ] 
          -->
+
+        <div class="w-full lg:max-w-sm bg-yellow-300 rounded-lg overflow-hidden">
+            <div class=" relative" style="padding-bottom: 50%">
+                <img src="https://picsum.photos/600/" alt="" class="absolute h-full w-full object-cover" />
+            </div>
+            <div class="p-6">
+                <h4 class="mt-1 font-semibold text-yellow-900 text-lg leading-tight truncate">Almanac Beer Company</h4>
+                <hr class="border-yellow-900">
+                <div class=" relative text-yellow-700 text-xs uppercase ml-2">
+                    <span class=" absolute right-2 inline-block  text-yellow-900 text-2xl uppercase px-2">&star;</span>
+                    type: <span>micro</span>
+                    <div class="text-yellow-700 text-xs uppercase font-semibold ">
+                        <a href="tel:+415-553-5425" class="brewery-phone">415-553-5425</a>
+                         &bull; 
+                        <a href="http://almanacbeer.com">almanacbeer.com</a> 
+                    </div>
+                    <p translate="no" class="mt-2">
+                        <!-- use string formatting ? then how to wrap -->
+                        <span class="street">651B w tower ave</span><br>
+                        <span class="city">alameda</span>, <abbr title="California" class="region">CA</abbr> <span class="zip">94501</span> <abbr class="Country">USA</abbr>
+                    </p>
+                </div>
+            </div> 
+        </div>
+        
         <section id="results-wrapper" class="w-full p-2 mx-auto lg:mr-auto lg:ml-2 lg:w-4/5 max-w-screen-md">
             <div id="first-result" class="w-full my-2">
-                <div class="brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 mx-auto lg:p-2 lg:flex justify-center">
+                <div class="brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 mx-auto lg:p-1 lg:flex">
                     <div class="favorites absolute right-2">⭐</div>
-                    <div 
-                        class="img-wrapper w-full h-full max-h-md lg:rounded overflow-hidden " 
-                        >
-                        <iframe src="https://picsum.photos/1024/" scrolling="no" style="width: 100%; height:100%" frameborder="0"></iframe>
+                    <div class="img-wrapper lg:w-1/3 self-center  lg:rounded overflow-hidden object-cover" >
+                        <iframe src="https://picsum.photos/1024/" scrolling="no" frameborder="0" class="w-full h-full"></iframe>
                         
                     </div>
                     <address class="brewery-content p-2">
@@ -79,11 +102,9 @@
                 </div>
             </div>
             <div id="next-results" class="w-full flex flex-col lg:flex-row">
-                <div class="brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 w-full lg:basis-1/3 mx-auto lg:mx-1 ">
+                <div class="brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 w-full mb-2 lg:basis-1/3 mx-auto lg:mx-1 ">
                     <div class="favorites absolute right-2">⭐</div>
-                    <div 
-                        class="img-wrapper w-full h-full max-h-md overflow-hidden lg:h-1/3" 
-                        >
+                    <div class="img-wrapper w-full h-full max-h-md overflow-hidden lg:h-1/2">
                         <iframe src="https://picsum.photos/1024/" scrolling="no" style="width: 100%; height:100%" frameborder="0"></iframe>
                         
                     </div>
@@ -100,7 +121,7 @@
                     </address>
     
                 </div>
-                <div class="brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 w-full mx-auto lg:mx-1">
+                <div class="brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 w-full mb-2 lg:basis-1/3 mx-auto lg:mx-1">
                     <div class="favorites absolute right-2">⭐</div>
                     <div 
                         class="img-wrapper w-full h-full max-h-md overflow-hidden lg:h-1/3" 
@@ -121,7 +142,7 @@
                     </address>
     
                 </div>
-                <div class="brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 w-full mx-auto lg:mx-1">
+                <div class="brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 w-full mb-2 lg:basis-1/3 mx-auto lg:mx-1">
                     <div class="favorites absolute right-2">⭐</div>
                     <div 
                         class="img-wrapper w-full h-full max-h-md overflow-hidden lg:h-1/3" 

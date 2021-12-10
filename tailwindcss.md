@@ -44,3 +44,41 @@ Understanding Breakpoints
   </div>
 </div>
 ```
+
+Possible address formatting
+```html
+      <p translate="no" class="mt-2">
+          <!-- use string formatting ? then how to wrap -->
+          <span class="street">651B w tower ave</span><br>
+          <span class="city">alameda</span>, <abbr title="California" class="region">CA</abbr> <span class="zip">94501</span> <abbr class="Country">USA</abbr>
+      </p>
+```
+
+Setting Address Info
+```html
+        <div class="text-yellow-700 text-xs uppercase font-semibold ">
+            <a href="tel:+415-553-5425" class="brewery-phone">415-553-5425</a>
+              &bull; 
+            <a href="http://almanacbeer.com">almanacbeer.com</a> 
+        </div>
+        <p class="mt-2">
+            <!-- use string formatting -->
+            <p>651B W Tower Ave</p> 
+            <p>Alameda</p> 
+            <p>CA</p> 
+            <p >34 reviews</p>
+        </p>
+        
+```
+
+```js
+var add = {
+  street: '651B W Tower Ave',
+  city: 'Alameda',
+  locality: 'CA',
+  country: 'USA'
+  zip: '94501'
+}
+
+var adStr = `${add.street}, ${add.city}, ${add.locality} ${add.country}`
+```
