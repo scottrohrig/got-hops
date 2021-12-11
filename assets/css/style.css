@@ -1,0 +1,10 @@
+.first-img {
+    padding-bottom: 50%;
+}
+
+@media screen and (min-width: 1024px) {
+    
+    .first-img {
+        padding-right: 33%;
+    }
+}

@@ -80,5 +80,6 @@ var add = {
   zip: '94501'
 }
 
+var typeStr = add.type + ' brewery' 
 var adStr = `${add.street}, ${add.city}, ${add.locality} ${add.country}`
 ```
