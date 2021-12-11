@@ -38,8 +38,8 @@
             <div id="search-wrapper" class="w-full lg:w-1/5 mx-auto lg:ml-auto lg:mr-2 max-w-flex bg-gray-100 rounded-lg mb-2 lg:mb-0 p-2">
                 <form action="" type="submit" name="search" id="search-form">
                     <h2 id="search-title">Search</h2>
-                    <button type="submit" class="w-full text-yellow-800 bg-yellow-300">SUBMIT</button>
                     <input type="text" name="search" id="search" placeholder="City, State" autocomplete class="shadow appearance-none border rounded-lg w-full py-2 px-3 mt-2">
+                    <button type="submit" class="w-full text-yellow-800 bg-yellow-300  rounded-lg">SUBMIT</button>
                 </form>
             </div>
             <div id="first-result" class="w-full lg:w-4/5 mx-auto">
@@ -69,17 +69,6 @@
         </section>
 
         <!-- results -->
-        
-        <!-- 
-            TODO:   
-                    [ ] 1st & * results full width on sm-md; 1st takes up full width on lg, other results flex wrap maybe 3 cards
-                    [ ] create 'card' styling for results cards (to be added in js)
-                    [ ] make img take up top part of card full width
-                    [ ] hide overflow for image div
-                    [ ] add position-relative to parent of favorites
-                    [ ] add position-absolute to favorites top:8px rt: 8px
-                    [ ] 
-         -->
         
         <section id="results-wrapper" class="w-full flex flex-col mx-auto lg:flex-row">
             
@@ -122,7 +111,7 @@
     
                 </div>
                 <div class="brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 w-full mb-2 lg:basis-1/6 mx-auto lg:mx-1 ">
-                    <div class="favorites absolute right-2">⭐</div>
+                    <button class="favorites absolute right-2">⭐</button>
                     <div class="img-wrapper w-full h-full max-h-md overflow-hidden lg:h-1/2">
                         <iframe src="https://picsum.photos/1024/" scrolling="no" style="width: 100%; height:100%" frameborder="0"></iframe>
                         
