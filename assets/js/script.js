@@ -130,32 +130,34 @@ var makeFirstResult = function (brewery) {
     // return false;
     
     // create elements & assign classes
-    var card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3")
-    var imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44")
-    var favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2").text('☆')
-    var img = $('<iframe>').addClass("absolute h-full w-full object-cover").attr({
+    var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3")
+    var $imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44")
+    var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2").text('☆')
+    var $img = $('<iframe>').addClass("absolute h-full w-full object-cover").attr({
         'src': brewery.url,
         'scrolling': "no",
         'frameborder': "0"
     })
-    var addressField = $('<address>').addClass("p-2 lg:p-6")
-    var nameEl = $("mt-1 text-yellow-800 leading-tight truncate text-2xl").text(brewery.name)
-    // var separator = ("<hr>").addClass("border-yellow-900")
-    var contactWrapper = $('<div>').addClass("text-yellow-700 text-xs uppercase font-semibold")
-    var phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone)
-    var url = $('<a>').attr('href', brewery.url).text(brewery.url)
+    var $addressWrapper = $('<address>').addClass("p-2 lg:p-6")
+    var $nameEl = $('<h3>').addClass("mt-1 text-yellow-800 leading-tight truncate text-2xl").text(brewery.name)
+    var $separator = $("<hr>").addClass("border-yellow-900")
+    var $contactWrapper = $('<div>').addClass("mt-2 text-yellow-700 text-xs uppercase font-semibold")
+    var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone)
+    var $url = $('<a>').attr('href', brewery.url).text(brewery.url)
 
-    var addressText = `${brewery.street}, ${brewery.city}, ${brewery.state}, ${brewery.country} ${brewery.zip.split('-')[0]}`
+    var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`
+    var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText)
     
     // assign data-* 'id'
     // append to appropriate parent elements
-    imgWrapper.append(img, favBtn)
-    contactWrapper.append(phoneEl).append(' &bull; ').append(url)
-    addressField.append(nameEl).append(addressText)
-    // addressField.append(separator)
-    addressField.append(contactWrapper)
-    card.append(imgWrapper, addressField)
-    $('#first-result').append(card)
+    $imgWrapper.append($img, $favBtn)
+    $addressWrapper.append($nameEl)
+    $addressWrapper.append($separator)
+    $contactWrapper.append($phoneEl, ' &bull; ', $url)
+    $addressWrapper.append($contactWrapper)
+    $addressWrapper.append($addressEl)
+    $card.append($imgWrapper, $addressWrapper)
+    $('#first-result').append($card)
 }
 
 callPositionAPI(citySearched);
@@ -163,8 +165,8 @@ callPositionAPI(citySearched);
 var submitBtnClicked = function (event) {
     event.preventDefault();
     console.log("A submit button has been clicked!");
-    // citySearched = cityInputEl.value;
-    // callPositionAPI(citySearched);
+    citySearched = cityInputEl.value;
+    callPositionAPI(citySearched);
 }
 
 $('#search-form').submit(submitBtnClicked)
