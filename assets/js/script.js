@@ -1,5 +1,4 @@
 // Declare constants and variables
-const positionAPIKey = '3f39be56daa79b8f85d50e3d985d6f6d';
 const cityInputEl = $('#search');
 
 var citySearched = 'Oakland';
@@ -10,12 +9,12 @@ var breweryArray = [];
 
 // function to call the position API to gather the latitude and longitude of the user's search
 var callPositionAPI = function (city) {
-    var posApiCall = `http://api.positionstack.com/v1/forward?access_key=${positionAPIKey}&query=${city}`;
+    var posApiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=94e32ddc97880c45b19a69dfc85aec8d`;
     fetch(posApiCall)
         .then(response => response.json())
         .then(function (data) {
-            cityLat = data.data[0].latitude;
-            cityLong = data.data[0].longitude;
+            cityLat = data[0].lat;
+            cityLong = data[0].lon;
             // pass brewery API function here with the lat and long values determined
             callBreweryAPI(cityLat, cityLong);
         });
@@ -160,12 +159,12 @@ var makeFirstResult = function (brewery) {
     $('#first-result').append($card)
 }
 
-callPositionAPI(citySearched);
+// callPositionAPI(citySearched);
 
 var submitBtnClicked = function (event) {
     event.preventDefault();
-    console.log("A submit button has been clicked!");
-    citySearched = cityInputEl.value;
+    console.log(cityInputEl[0].value)
+    citySearched = cityInputEl[0].value;
     callPositionAPI(citySearched);
 }
 
