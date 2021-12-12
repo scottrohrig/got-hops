@@ -68,6 +68,7 @@ var showCards = function(breweryDataArray) {
       // loop thru remaining (index 1 to n)
       for (var i = 1; i < breweryDataArray.length; i++) {
           // makeResult(breweryDataArray[i])
+        makeRemainingResults(breweryDataArray[i])
       }
 }
 
@@ -157,6 +158,43 @@ var makeFirstResult = function (brewery) {
     $addressWrapper.append($addressEl)
     $card.append($imgWrapper, $addressWrapper)
     $('#first-result').append($card)
+}
+
+var makeRemainingResults = function(brewery) {
+    // test functionality
+    console.log('making remaining result', brewery);
+    // return early to prevent added errors
+    // return false;
+    
+    // create elements & assign classes
+    var $card = $('<div>').addClass("brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 basis-full mb-2 lg:basis-1/6 mx-auto lg:mx-1")
+    var $imgWrapper = $('<div>').addClass("relative img-wrapper w-full h-full max-h-md overflow-hidden lg:h-1/2")
+    var $favBtn = $('<button>').addClass("favorites absolute left-2 text-2xl").text('☆')
+    var $img = $('<iframe>').addClass('absolute object-cover h-full w-full').attr({
+        'src': brewery.url,
+        'scrolling': "no",
+        'frameborder': "0"
+    })
+    var $addressWrapper = $('<address>').addClass("brewery-content p-2")
+    var $nameEl = $('<h3>').addClass("brewery-name inline text-2xl").text(brewery.name)
+    var $separator = $("<hr>").addClass("border-yellow-800 my-1")
+    var $contactWrapper = $('<div>').addClass("mt-2 text-yellow-700 text-xs uppercase font-semibold")
+    var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone)
+    var $url = $('<a>').attr('href', brewery.url).text(brewery.url)
+
+    var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`
+    var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText)
+    
+    // assign data-* 'id'
+    // append to appropriate parent elements
+    $imgWrapper.append($img, $favBtn)
+    $addressWrapper.append($nameEl)
+    $addressWrapper.append($separator)
+    $contactWrapper.append($phoneEl, ' &bull; ', $url)
+    $addressWrapper.append($contactWrapper)
+    $addressWrapper.append($addressEl)
+    $card.append($imgWrapper, $addressWrapper)
+    $('#results-wrapper').append($card)
 }
 
 // callPositionAPI(citySearched);
