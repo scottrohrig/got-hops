@@ -171,6 +171,8 @@ var submitBtnClicked = function (event) {
 
 $('#search-form').submit(submitBtnClicked)
 
+$('#favorites-button').on("click",loadFavorites)
+
 $('main').on('click','.favorites', function() {
     var currentText = $(this).html()
     var starToggleText = (currentText === '☆') ? '★' : '☆'
