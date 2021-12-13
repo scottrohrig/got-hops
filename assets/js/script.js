@@ -69,7 +69,9 @@ var showCards = function(breweryDataArray) {
       // loop thru remaining (index 1 to n)
       for (var i = 1; i < breweryDataArray.length; i++) {
           // makeResult(breweryDataArray[i])
+
         makeRemainingResults(breweryDataArray[i], i);
+
       }
 }
 
@@ -134,6 +136,7 @@ var makeFirstResult = function (brewery) {
     // return false;
     
     // create elements & assign classes
+
     var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3").data('id', 0);
     var $imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44");
     var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2").text('☆');
@@ -146,10 +149,13 @@ var makeFirstResult = function (brewery) {
     var $separator = $("<hr>").addClass("border-yellow-900");
     var $contactWrapper = $('<div>').addClass("mt-2 text-yellow-700 text-xs uppercase font-semibold");
     var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone);
-    var $url = $('<a>').attr('href', brewery.url).text(brewery.url);
+    // TODO:
+        // Edit the URL so that http:// and https:// are no longer present
+    var $url = $('<a>').attr('href', brewery.url).text(brewery.url)
 
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
+
     
     // assign data-* 'id'
     $card.data('id', 0);
@@ -169,6 +175,7 @@ var makeRemainingResults = function(brewery, index) {
     console.log('making remaining result');
     // return early to prevent added errors
     // return false;
+
     const imgSource = 'https://picsum.photos/600/'
     
     // create elements & assign classes
@@ -187,10 +194,12 @@ var makeRemainingResults = function(brewery, index) {
 
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
+
     
     // assign data-* 'id'
     $card.data('id', index)
     // append to appropriate parent elements
+
     $imgWrapper.append($img, $favBtn);
     $addressWrapper.append($nameEl);
     $addressWrapper.append($separator);
@@ -199,6 +208,7 @@ var makeRemainingResults = function(brewery, index) {
     $addressWrapper.append($addressEl);
     $card.append($imgWrapper, $addressWrapper);
     $('#results-wrapper').append($card);
+
 }
 
 callPositionAPI(citySearched);
