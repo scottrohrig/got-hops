@@ -1,11 +1,14 @@
-// Declare constants and variables
-const cityInputEl = $('#search');
 
-var citySearched = 'Oakland';
-var cityLat;
-var cityLong;
+// Declare constants and variables
+
 var breweryArray = [];
 var favorites = [];
+
+var imgs = [
+    'mateusz-feliksik-1UDj1sTzmzQ-unsplash.jpg','mel-elias-eZZKqB4OPzk-unsplash.jpg', 'patrick-fore-5PRp-FvsI0Q-unsplash.jpg','patrick-fore-rrvAuudnAfg-unsplash.jpg',
+    'thais-do-rio-EUO7L470LXk-unsplash.jpg',
+    'pradnyal-gandhi-1MqDCpA-2hU-unsplash.jpg'
+]
 
 // function to call the position API to gather the latitude and longitude of the user's search
 var callPositionAPI = function (city) {
@@ -13,8 +16,8 @@ var callPositionAPI = function (city) {
     fetch(posApiCall)
         .then(response => response.json())
         .then(function (data) {
-            cityLat = data[0].lat;
-            cityLong = data[0].lon;
+            var cityLat = data[0].lat;
+            var cityLong = data[0].lon;
             // pass brewery API function here with the lat and long values determined
             callBreweryAPI(cityLat, cityLong);
         });
@@ -26,7 +29,7 @@ var callBreweryAPI = function (lat, long) {
     fetch(breweryApiCall)
         .then(response => response.json())
         .then(function (data) {
-            console.log(data);
+            // console.log(data);
             createResults(data);
         });
 }
@@ -122,16 +125,23 @@ var createBreweryObj = function (dataItem) {
     }
 }
 
+var wrapImgs = function() {
+    var img = imgs.shift();
+    imgs.push(img);
+    return img;
+}
+
 /**
  * ### Creates first result card elements from given brewery info
  * @param {Object} breweryDataObj 
  */
 var makeFirstResult = function (brewery) {
 
-    const imgSource = 'https://picsum.photos/920/';
+
+    const imgSource = `./assets/images/${wrapImgs()}`;
 
     // test functionality
-    console.log('making first result', brewery);
+    // console.log('making first result', brewery);
     // return early to prevent added errors
     // return false;
     
@@ -140,9 +150,8 @@ var makeFirstResult = function (brewery) {
     var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3").data('id', 0);
     var $imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44");
     var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2").text('☆');
-    var $img = $('<iframe>').addClass("absolute h-full w-full object-cover").attr({
+    var $img = $('<img>').addClass("absolute h-full w-full object-cover").attr({
         'src': imgSource,
-        'scrolling': 'no'
     })
     var $addressWrapper = $('<address>').addClass("p-2 lg:p-6");
     var $nameEl = $('<h3>').addClass("mt-1 text-yellow-800 leading-tight truncate text-2xl").text(brewery.name);
@@ -176,13 +185,13 @@ var makeRemainingResults = function(brewery, index) {
     // return early to prevent added errors
     // return false;
 
-    const imgSource = 'https://picsum.photos/600/'
+    const imgSource = `./assets/images/${wrapImgs()}`;
     
     // create elements & assign classes
-    var $card = $('<div>').addClass("brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 basis-full mb-2 lg:basis-1/6 mx-auto lg:mx-1");
-    var $imgWrapper = $('<div>').addClass("relative img-wrapper w-full h-full max-h-md overflow-hidden lg:h-1/2");
-    var $favBtn = $('<button>').addClass("favorites absolute left-2 text-2xl").text('☆');
-    var $img = $('<iframe>').addClass('absolute object-cover h-full w-full').attr({
+    var $card = $('<div>').addClass("brewery-card overflow-hidden rounded-lg bg-yellow-300 text-yellow-800");
+    var $imgWrapper = $('<div>').addClass("relative img-wrapper w-full max-h-md overflow-hidden ");
+    var $favBtn = $('<button>').addClass("favorites absolute left-2 top-2 text-yellow-300 text-4xl").text('☆');
+    var $img = $('<img>').addClass('absolute object-cover h-full w-full').attr({
         'src': imgSource,
     })
     var $addressWrapper = $('<address>').addClass("brewery-content p-2");
@@ -211,12 +220,11 @@ var makeRemainingResults = function(brewery, index) {
 
 }
 
-callPositionAPI(citySearched);
-
 var submitBtnClicked = function (event) {
     event.preventDefault();
-    console.log(cityInputEl[0].value);
-    citySearched = cityInputEl[0].value;
+    // TODO: - [ ] validate empty search field && return early if it is
+    console.log($('#search').val().trim());
+    var citySearched = $('#search').val();
     callPositionAPI(citySearched);
 }
 
@@ -229,7 +237,7 @@ $('main').on('click','.favorites', function() {
     var starToggleText = (currentText === '☆') ? '★' : '☆'
     $(this).text(starToggleText);
 
-    // card .id
+    // card id
     var cardId = $(this).parents('.brewery-card').data('id');
     console.log('card id:', cardId);
 
