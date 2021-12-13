@@ -20,6 +20,7 @@ var callPositionAPI = function (city) {
             var cityLong = data[0].lon;
             // pass brewery API function here with the lat and long values determined
             callBreweryAPI(cityLat, cityLong);
+            updateMapFrameSrc(city);
         });
 }
 
@@ -52,6 +53,8 @@ var loadFavorites = function() {
     // assign to favorites array
     favorites = tempArr;
 
+    // clear search input form
+    $('#search').val('');
     showCards(favorites);
 
 }
@@ -139,11 +142,6 @@ var makeFirstResult = function (brewery) {
 
 
     const imgSource = `./assets/images/${wrapImgs()}`;
-
-    // test functionality
-    // console.log('making first result', brewery);
-    // return early to prevent added errors
-    // return false;
     
     // create elements & assign classes
 
@@ -152,6 +150,7 @@ var makeFirstResult = function (brewery) {
     var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2").text('☆');
     var $img = $('<img>').addClass("absolute h-full w-full object-cover").attr({
         'src': imgSource,
+        'alt': brewery.name
     })
     var $addressWrapper = $('<address>').addClass("p-2 lg:p-6");
     var $nameEl = $('<h3>').addClass("mt-1 text-yellow-800 leading-tight truncate text-2xl").text(brewery.name);
@@ -180,8 +179,7 @@ var makeFirstResult = function (brewery) {
 }
 
 var makeRemainingResults = function(brewery, index) {
-    // test functionality
-    console.log('making remaining result');
+
     // return early to prevent added errors
     // return false;
 
@@ -193,6 +191,7 @@ var makeRemainingResults = function(brewery, index) {
     var $favBtn = $('<button>').addClass("favorites absolute left-2 top-2 text-yellow-300 text-4xl").text('☆');
     var $img = $('<img>').addClass('absolute object-cover h-full w-full').attr({
         'src': imgSource,
+        'alt': brewery.name
     })
     var $addressWrapper = $('<address>').addClass("brewery-content p-2");
     var $nameEl = $('<h3>').addClass("brewery-name inline text-2xl").text(brewery.name);
@@ -226,6 +225,17 @@ var submitBtnClicked = function (event) {
     console.log($('#search').val().trim());
     var citySearched = $('#search').val();
     callPositionAPI(citySearched);
+}
+
+var updateMapFrameSrc = function (location) {
+    var $src = $('#map-canvas');
+    console.log($src.attr('src'));
+    var location = location.split(" ").join("");
+    var regEx = /q=[\D\s]*(?=&)/g;
+    var srcText = $src
+        .attr('src')
+        .replace(regEx, "q=" + location);
+    $src.attr('src', srcText);
 }
 
 $('#search-form').submit(submitBtnClicked);
