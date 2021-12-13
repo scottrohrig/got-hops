@@ -32,7 +32,7 @@ var callBreweryAPI = function (lat, long) {
 }
 
 var saveFavorites = function() {
-    localStorage.setItem('favorites', favorites);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
 }
 
 /**
@@ -64,11 +64,12 @@ var showCards = function(breweryDataArray) {
       
       // show first favorite 
       makeFirstResult(breweryDataArray[0]);
+      
   
       // loop thru remaining (index 1 to n)
       for (var i = 1; i < breweryDataArray.length; i++) {
           // makeResult(breweryDataArray[i])
-        makeRemainingResults(breweryDataArray[i]);
+        makeRemainingResults(breweryDataArray[i], i);
       }
 }
 
@@ -82,13 +83,13 @@ var parseResults = function(resultsData) {
     for (let res of resultsData) {
         tempArr.push(createBreweryObj(res));
     }
-    return tempArr
+    return tempArr;
 }
 
 var createResults = function(dataArray) {
     // validate data
     if (!dataArray) {
-        return false
+        return false;
     } else {
         dataArray = parseResults(dataArray);
     //setting the breweryarray to what comes in from search result data
@@ -126,19 +127,20 @@ var createBreweryObj = function (dataItem) {
  */
 var makeFirstResult = function (brewery) {
 
+    const imgSource = 'https://picsum.photos/920/';
+
     // test functionality
     console.log('making first result', brewery);
     // return early to prevent added errors
     // return false;
     
     // create elements & assign classes
-    var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3");
+    var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3").data('id', 0);
     var $imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44");
     var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2").text('☆');
     var $img = $('<iframe>').addClass("absolute h-full w-full object-cover").attr({
-        'src': brewery.url,
-        'scrolling': "no",
-        'frameborder': "0"
+        'src': imgSource,
+        'scrolling': 'no'
     })
     var $addressWrapper = $('<address>').addClass("p-2 lg:p-6");
     var $nameEl = $('<h3>').addClass("mt-1 text-yellow-800 leading-tight truncate text-2xl").text(brewery.name);
@@ -151,6 +153,7 @@ var makeFirstResult = function (brewery) {
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
     
     // assign data-* 'id'
+    $card.data('id', 0);
     // append to appropriate parent elements
     $imgWrapper.append($img, $favBtn);
     $addressWrapper.append($nameEl);
@@ -162,20 +165,19 @@ var makeFirstResult = function (brewery) {
     $('#first-result').append($card);
 }
 
-var makeRemainingResults = function(brewery) {
+var makeRemainingResults = function(brewery, index) {
     // test functionality
-    console.log('making remaining result', brewery);
+    console.log('making remaining result');
     // return early to prevent added errors
     // return false;
+    const imgSource = 'https://picsum.photos/600/'
     
     // create elements & assign classes
     var $card = $('<div>').addClass("brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 basis-full mb-2 lg:basis-1/6 mx-auto lg:mx-1");
     var $imgWrapper = $('<div>').addClass("relative img-wrapper w-full h-full max-h-md overflow-hidden lg:h-1/2");
     var $favBtn = $('<button>').addClass("favorites absolute left-2 text-2xl").text('☆');
     var $img = $('<iframe>').addClass('absolute object-cover h-full w-full').attr({
-        'src': brewery.url,
-        'scrolling': "no",
-        'frameborder': "0",
+        'src': imgSource,
     })
     var $addressWrapper = $('<address>').addClass("brewery-content p-2");
     var $nameEl = $('<h3>').addClass("brewery-name inline text-2xl").text(brewery.name);
@@ -188,6 +190,7 @@ var makeRemainingResults = function(brewery) {
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
     
     // assign data-* 'id'
+    $card.data('id', index)
     // append to appropriate parent elements
     $imgWrapper.append($img, $favBtn);
     $addressWrapper.append($nameEl);
@@ -199,7 +202,7 @@ var makeRemainingResults = function(brewery) {
     $('#results-wrapper').append($card);
 }
 
-// callPositionAPI(citySearched);
+callPositionAPI(citySearched);
 
 var submitBtnClicked = function (event) {
     event.preventDefault();
@@ -216,7 +219,18 @@ $('main').on('click','.favorites', function() {
     var currentText = $(this).html();
     var starToggleText = (currentText === '☆') ? '★' : '☆'
     $(this).text(starToggleText);
-    // add to/remove from breweries array
-    // breweryArray.push(brewery data) // may need to store brewery data elsewhere 
-    // save favorites
+
+    // card .id
+    var cardId = $(this).parents('.brewery-card').data('id');
+    console.log('card id:', cardId);
+
+    // Check if obj is in fav array
+    if (favorites.includes(breweryArray[cardId])) {
+        favorites.remove(cardId);
+    } else {
+        favorites.shift(breweryArray[cardId]);
+    }
+
+    // Save fav array to local storage
+    saveFavorites();
 })
