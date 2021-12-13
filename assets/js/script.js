@@ -46,10 +46,10 @@ var loadFavorites = function() {
         return false;
     }
 
-    // assign to brewery array
-    breweryArray = tempArr;
+    // assign to favorites array
+    favorites = tempArr;
 
-    showCards(breweryArray);
+    showCards(favorites);
 
 }
 
@@ -96,7 +96,6 @@ var createResults = function(dataArray) {
     }
 
     showCards(dataArray);
-
 }
 
 // NOTE: this info is what we save to use for favorites, we don't need to do another fetch request
