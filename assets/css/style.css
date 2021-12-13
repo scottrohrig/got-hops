@@ -1,6 +1,8 @@
-.first-img {
+.first-img,
+.img-wrapper {
     padding-bottom: 50%;
 }
+
 
 @media screen and (min-width: 1024px) {
     

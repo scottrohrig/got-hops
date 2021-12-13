@@ -68,7 +68,7 @@ var showCards = function(breweryDataArray) {
       // loop thru remaining (index 1 to n)
       for (var i = 1; i < breweryDataArray.length; i++) {
           // makeResult(breweryDataArray[i])
-        makeRemainingResults(breweryDataArray[i])
+        makeRemainingResults(breweryDataArray[i], i)
       }
 }
 
@@ -133,17 +133,17 @@ var makeFirstResult = function (brewery) {
     var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3")
     var $imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44")
     var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2").text('☆')
-    var $img = $('<iframe>').addClass("absolute h-full w-full object-cover").attr({
-        'src': brewery.url,
-        'scrolling': "no",
-        'frameborder': "0"
+    var $img = $('<img>').addClass("absolute h-full w-full object-cover").attr({
+        'src': 'https://picsum.photos/600/',
     })
     var $addressWrapper = $('<address>').addClass("p-2 lg:p-6")
     var $nameEl = $('<h3>').addClass("mt-1 text-yellow-800 leading-tight truncate text-2xl").text(brewery.name)
     var $separator = $("<hr>").addClass("border-yellow-900")
     var $contactWrapper = $('<div>').addClass("mt-2 text-yellow-700 text-xs uppercase font-semibold")
     var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone)
-    var $url = $('<a>').attr('href', brewery.url).text(brewery.url)
+    // TODO:
+        // Edit the URL so that http:// and https:// are no longer present
+    var $url = $('<a>').attr('href', brewery.url).text(urlText)
 
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText)
@@ -165,32 +165,32 @@ var makeRemainingResults = function(brewery) {
     console.log('making remaining result', brewery);
     // return early to prevent added errors
     // return false;
+    const imgSource = './assets/images/amie-johnson-VJXLzQi5TlE-unsplash.jpg';
     
     // create elements & assign classes
-    var $card = $('<div>').addClass("brewery-card overflow-hidden relative rounded-lg bg-yellow-300 text-yellow-800 basis-full mb-2 lg:basis-1/6 mx-auto lg:mx-1")
-    var $imgWrapper = $('<div>').addClass("relative img-wrapper w-full h-full max-h-md overflow-hidden lg:h-1/2")
+    var $card = $('<div>').addClass("brewery-card inline relative rounded-lg bg-yellow-300 text-yellow-800 w-full mb-2 mx-auto lg:mx-1")
+    var $imgWrapper = $('<div>').addClass("relative img-wrapper w-full h-1/2 max-h-md overflow-hidden")
     var $favBtn = $('<button>').addClass("favorites absolute left-2 text-2xl").text('☆')
-    var $img = $('<iframe>').addClass('absolute object-cover h-full w-full').attr({
-        'src': brewery.url,
-        'scrolling': "no",
-        'frameborder': "0"
+    var $img = $('<img>').addClass('absolute object-cover h-full w-full').attr({
+        'src': imgSource,
     })
     var $addressWrapper = $('<address>').addClass("brewery-content p-2")
-    var $nameEl = $('<h3>').addClass("brewery-name inline text-2xl").text(brewery.name)
+    var $nameEl = $('<h3>').addClass("brewery-name inline text-xl").text(brewery.name)
     var $separator = $("<hr>").addClass("border-yellow-800 my-1")
     var $contactWrapper = $('<div>').addClass("mt-2 text-yellow-700 text-xs uppercase font-semibold")
-    var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone)
-    var $url = $('<a>').attr('href', brewery.url).text(brewery.url)
+    var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text('Phone: ' + brewery.phone)
+    var urlText = brewery.url.replace('http://', '')
+    var $url = $('<a>').attr('href', brewery.url).text('URL: ' + urlText)
 
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`
-    var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText)
+    var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text('Address: ' + addressText)
     
     // assign data-* 'id'
     // append to appropriate parent elements
     $imgWrapper.append($img, $favBtn)
     $addressWrapper.append($nameEl)
     $addressWrapper.append($separator)
-    $contactWrapper.append($phoneEl, ' &bull; ', $url)
+    $contactWrapper.append($phoneEl, '<br><br>', $url)
     $addressWrapper.append($contactWrapper)
     $addressWrapper.append($addressEl)
     $card.append($imgWrapper, $addressWrapper)
