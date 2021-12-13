@@ -50,7 +50,6 @@ var loadFavorites = function() {
     breweryArray = tempArr;
 
     showCards(breweryArray);
-
 }
 
 /**
@@ -228,7 +227,7 @@ $('main').on('click','.favorites', function() {
     if (favorites.includes(breweryArray[cardId])) {
         favorites.remove(cardId);
     } else {
-        favorites.shift(breweryArray[cardId]);
+        favorites.unshift(breweryArray[cardId]);
     }
 
     // Save fav array to local storage
