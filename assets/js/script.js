@@ -70,7 +70,7 @@ var loadFavorites = function() {
     // add for loop here to remove null
     for (var i = 0; i < tempArr.length; i++) {
         if(!tempArr[i]) {
-            // tempArr.remove(i)
+            tempArr.remove(i)
             console.log(tempArr)
         }
     }
@@ -81,6 +81,7 @@ var loadFavorites = function() {
 
     // clear search input form
     $('#search').val('');
+    debugger;
     showCards(favorites);
 }
 
@@ -277,11 +278,11 @@ $('main').on('click','.favorites', function() {
     console.log('card id:', cardId);
 
     // Check if obj is in fav array
-    // if (favorites.includes(breweryArray[cardId])) {
-    //     favorites.remove(cardId);
-    // } else {
-    //     favorites.unshift(breweryArray[cardId]);
-    // }
+    if (favorites.includes(breweryArray[cardId])) {
+        favorites.remove(cardId);
+    } else {
+        favorites.unshift(breweryArray[cardId]);
+    }
 
     // Save fav array to local storage
     saveFavorites();
