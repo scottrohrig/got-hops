@@ -47,7 +47,7 @@ var callBreweryAPI = function (lat, long) {
     fetch(breweryApiCall)
         .then(response => response.json())
         .then(function (data) {
-            console.log(data);
+            // console.log(data);
             createResults(data);
         });
 }
