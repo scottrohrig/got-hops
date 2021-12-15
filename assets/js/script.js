@@ -295,7 +295,10 @@ $closeButton.on('click', function() {
 });
 
 $(document).keydown(function(e) { 
-    if (e.keyCode === 27) { 
-        $modal.removeClass('show-modal')
+    if (e.keyCode === 27) {
+        // add a check to see if the modal already has a show-modal class
+        if($modal.hasClass('show-modal')) {
+            $modal.removeClass('show-modal')
+        }
     } 
 });
