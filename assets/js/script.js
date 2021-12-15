@@ -50,6 +50,10 @@ var loadFavorites = function() {
         return false;
     }
     console.log(tempArr)
+
+    // TODO: [ ] validate using brewery.id
+
+
     // add for loop here to remove null
     for (var i = 0; i < tempArr.length; i++) {
         if(!tempArr[i]) {
@@ -98,7 +102,16 @@ var showCards = function(breweryDataArray) {
 var parseResults = function(resultsData) {
     var tempArr = [];
     for (let res of resultsData) {
-        tempArr.push(createBreweryObj(res));
+        res = createBreweryObj(res);
+        
+        // set favorites
+        favorites.forEach( item => { 
+            if ( res.id === item.id ) {
+                res.isFavorite = true;
+            }
+         })
+
+        tempArr.push(res);
     }
     return tempArr;
 }
@@ -133,7 +146,8 @@ var createBreweryObj = function (dataItem) {
         country:    dataItem.country,
         zip:        dataItem.postal_code,
         phone:      dataItem.phone, // "9254705280"
-        url:        dataItem.website_url // "http://www.aleindustries.com"
+        url:        dataItem.website_url, // "http://www.aleindustries.com"
+        isFavorite: false  // TODO: make this a function comparing if dataItem.id matches any favorited brewery's id.
     }
 }
 
@@ -142,6 +156,27 @@ var wrapImgs = function() {
     imgs.push(img);
     return img;
 }
+
+/**
+ * assigns the card element a data attribute with the brewery id checks if id is in favorites and sets the brewery.isFavorite accordingly
+ * @param {Object} brewery 
+ * @param {$Object} $card
+ */
+var addDataAttr = function(brewery, $card) {
+
+
+    // loop thru favorites to match brewery id
+    favorites.forEach( function (ele) {
+        console.log('fav ele',ele, 'fav ele.id', ele.id);
+    })
+    $card.data('meta', brewery);
+
+    console.log('meta:',
+    $card.data('id')
+    );
+
+}
+
 
 /**
  * ### Creates first result card elements from given brewery info
@@ -156,7 +191,7 @@ var makeFirstResult = function (brewery) {
 
     var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3").data('id', 0);
     var $imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44");
-    var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2").text('☆');
+    var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2");
     var $img = $('<img>').addClass("absolute h-full w-full object-cover").attr({
         'src': imgSource,
         'alt': brewery.name
@@ -170,12 +205,20 @@ var makeFirstResult = function (brewery) {
         // Edit the URL so that http:// and https:// are no longer present
     var $url = $('<a>').attr('href', brewery.url).text(brewery.url)
 
+    // assign favorites state
+    var favState = brewery.isFavorite ? '★' : '☆'
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
-    var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
-
     
-    // assign data-* 'id'
-    $card.data('id', 0);
+    var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
+    $favBtn.text(favState);
+    $card.data('id', brewery.id);
+    addDataAttr(brewery, $card);
+    
+    // assign data id for lookup
+    // check if card id matches id of brewery in favorites[]
+    // set favorites start ⭐ state
+    $favBtn.text(favState);
+    
     // append to appropriate parent elements
     $imgWrapper.append($img, $favBtn);
     $addressWrapper.append($nameEl);
@@ -257,18 +300,40 @@ $('main').on('click','.favorites', function() {
     $(this).text(starToggleText);
 
     // card id
-    var cardId = $(this).parents('.brewery-card').data('id');
-    console.log('card id:', cardId);
+    var breweryObject = $(this).parents('.brewery-card').data('meta');
+    // var cardId = $(this).parents('.brewery-card').data('id');
+    console.log('card meta:', breweryObject.id);
 
-    // Check if obj is in fav array
-    if (favorites.includes(breweryArray[cardId])) {
-        favorites.remove(cardId);
-    } else {
-        favorites.unshift(breweryArray[cardId]);
+    // on fav clicked; get related brewery; loop thru fav; 
+    // if brewery.id === fav[i].id; => remove fav[i] : fav.unshift(brewery)
+
+
+    // get item matching id
+    var breweryInFavorites = (id) => {
+        for (var brewery of favorites) {
+            if (brewery.id === id) {
+                return brewery;
+            }
+        }
     }
-
+    var brewery = breweryInFavorites(breweryObject.id);
+    if (brewery) {
+        console.log('brewery in favorites, remove it', brewery);
+    } else {
+        
+        favorites.unshift(breweryObject);
+        
+    }
+    
+    
     // Save fav array to local storage
     saveFavorites();
+
+    // Check if obj is in fav array
+    // var fav = favorites.filter( f => f.id === breweryObject.id);
+    // console.log('fav',fav);
+
+
 })
 
 loadFavorites();
