@@ -49,9 +49,18 @@ var loadFavorites = function() {
     if (!tempArr) {
         return false;
     }
+    console.log(tempArr)
+    // add for loop here to remove null
+    for (var i = 0; i < tempArr.length; i++) {
+        if(!tempArr[i]) {
+            tempArr.remove(i)
+            console.log(tempArr)
+        }
+    }
 
     // assign to favorites array
     favorites = tempArr;
+    breweryArray = tempArr;
 
     // clear search input form
     $('#search').val('');
@@ -261,3 +270,5 @@ $('main').on('click','.favorites', function() {
     // Save fav array to local storage
     saveFavorites();
 })
+
+loadFavorites();
