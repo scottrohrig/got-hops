@@ -81,7 +81,6 @@ var loadFavorites = function() {
 
     // clear search input form
     $('#search').val('');
-    debugger;
     showCards(favorites);
 }
 
