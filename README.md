@@ -1,5 +1,6 @@
 # Got-Hops
-A craft brewery search
+A craft brewery search application
+
 
 ## Table of contects
 
@@ -7,17 +8,19 @@ A craft brewery search
 - [Preview](#preview)
 - [User Story](#user-story)
 - [Website](#website)
+- [Contributions](#contributions) 
 - [Images](#images)
-- [Contributors](#contributors) 
+- [Built With](#built-with)
 
 ## Description
-
 Given a "Beer Dashboard" with form inputs, when I search for a city. I am presented with a list of nearby breweries. When I click the search button the closest brewery is displayed followed by a list of other breweries. When I click on a brewery, I am presented with a details of the brewery. When I click on a starred brewery recommended by others I can add it to my favorites and the favorites are stored to local storage. 
 
 ## Preview
 ### -Header
-    -Search
-    -Results, Map, Favorites
+### -Search
+### -Results
+### -Map
+### -Favorites
 
 ## User Story
 As an avid connoisseur of crafted beer from around the world.
@@ -25,6 +28,7 @@ I want a web application that finds nearby breweries with pricing and a list of 
 So that I can find nearby ones, but also ones that are off the grid and not as well known.
 
 ## Website
+[View Live Site](#got-hops)
 
 ## Contributions
 <details>
@@ -34,17 +38,9 @@ So that I can find nearby ones, but also ones that are off the grid and not as w
 - Mianta McKnight</details>
 
 ## Images
-<img src="" alt=""
-  style="display:block; /* override the default display setting of `inline-block` */
-            float:none; /* override any prior settings of `left` or `right` */
-            /* set both the left and right margins to `auto` to center the image */
-            margin-left:auto;
-            margin-right:auto;
-            width:60%; /* optionally resize the image to a screen percentage width if you want too */
-            ">
-            <p align="center">
-  <img width="460" height="300" src="">
-</p>
+![mobile-preview](./assets/images/preview-mobile.png)
+
+![desktop-demo](./assets/images/demo-desktop.gif)
 
 
 ## Built with
