@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Got Hops</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body class="bg-gray-200">
+    <header class='flex w-4/5 max-w-7xl mx-h-24 mx-auto'>
+        <div class="bg-yellow-300 w-full mx-auto py-3 rounded-b-lg">
+            <h1 class="text-center text-yellow-800 text-4xl font-bold">got🍻hops</h1>
+        </div>
+    </header>
+
+
+    <main class="flex flex-col w-4/5 max-w-7xl py-2 mt-5 mx-auto">
+        
+        
+        <!-- search -->
+    
+        <section id="jumbotron" class="flex flex-col lg:flex-row mb-2">
+            <div id="search-wrapper" class="w-full lg:w-1/5 mx-auto lg:ml-auto lg:mr-2 max-w-flex bg-gray-100 rounded-lg mb-2 lg:mb-0 p-2">
+                <form action="" type="submit" name="search" id="search-form">
+                    <h2 id="search-title" class="text-yellow-800">Find local breweries</h2>
+                    <div id="map-container" style="overflow-x: hidden;">
+                        <div id="map" class="map_part overflow-hidden rounded border-2 border-white" scrolling="no">
+                            <iframe id="map-canvas" class="map_part" width="100%" height="100%" frameborder="0"  marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%&hl=en&q=Berkeley&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe>
+                            <!-- <iframe width="100%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=-84.46426391601562%2C42.20817645934742%2C-82.65151977539064%2C43.1090040242731&amp;layer=mapnik" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/#map=10/42.6602/-83.5579">View Larger Map</a></small> -->
+                        </div>
+                    </div>
+                    <input type="text" name="search" id="search" placeholder="City, State" autocomplete class="shadow appearance-none border rounded-lg w-full py-2 px-3 mt-2">
+                    <button type="submit" class="w-full text-yellow-800 bg-yellow-300 py-2 px-3 rounded-lg mt-2 uppercase">search</button>
+                    <button type="favorites" id="favorites-button" class="w-full text-yellow-800 bg-yellow-200 py-2 px-3 rounded-lg mt-2">FAVORITES</button>
+                </form>
+            </div>
+            <div id="first-result" class="w-full lg:w-4/5 mx-auto">
+                <div class="rounded-lg overflow-hidden flex justify-center" style="height: 372px">
+                    <div class="flex items-center text-center w-full bg-yellow-200 lg:bg-gray-50 justify-center">
+                        <p class="mt-1 leading-tight text-amber-500 lg:text-gray-300 text-2xl">Welcome to got<b>🍻</b>hops, search to show breweries!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- results -->
+        
+        <section id="results-wrapper" class="w-full inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        </section>
+    </main>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
