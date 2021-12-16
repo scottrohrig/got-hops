@@ -14,8 +14,8 @@ var imgs = [
 ]
 
 // function to call the position API to gather the latitude and longitude of the user's search
-var callPositionAPI = function (city) {
-    var posApiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=94e32ddc97880c45b19a69dfc85aec8d`;
+var callPositionAPI = function (location) {
+    var posApiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=94e32ddc97880c45b19a69dfc85aec8d`;
     fetch(posApiCall)
         .then(response => response.json())
         .then(function (data) {
@@ -32,7 +32,7 @@ var callPositionAPI = function (city) {
 
             // pass brewery API function here with the lat and long values determined
             callBreweryAPI(cityLat, cityLong);
-            updateMapFrameSrc(city);
+            updateMapFrameSrc(location);
         });
 }
 
@@ -66,7 +66,7 @@ var loadFavorites = function() {
     if (!tempArr) {
         return false;
     }
-    console.log(tempArr)
+    // console.log(tempArr)
 
     // TODO: [ ] validate using brewery.id
 
@@ -180,17 +180,38 @@ var wrapImgs = function() {
  */
 var addDataAttr = function(brewery, $card) {
 
-
-    // loop thru favorites to match brewery id
-    favorites.forEach( function (ele) {
-        console.log('fav ele',ele, 'fav ele.id', ele.id);
-    })
     $card.data('meta', brewery);
 
-    console.log('meta:',
-    $card.data('id')
-    );
+}
 
+/**
+ * toggles the brewery's isFavorite boolean value.
+ * @param {Object} brewery 
+ * @returns 
+ */
+var setFavState = function(brewery) {
+    // match brewery with favs[i]
+    var fav = getFavorite(brewery);
+    if ( fav.id === brewery.id ) {
+        brewery.isFavorite = false;
+        return
+    }
+    brewery.isFavorite = true;
+}
+
+/**
+ * Given a brewery object, returns the matching favorites object, otherwise the brewery obj.
+ * @param {Oject} brewery 
+ * @returns 
+ */
+var getFavorite = function(brewery) {
+    var fav = favorites.filter( favorite => favorite.id === brewery.id );
+
+    if ( fav.length ) {
+        return fav;
+    }
+    console.log('fav not found:')
+    return brewery
 }
 
 
@@ -221,18 +242,17 @@ var makeFirstResult = function (brewery) {
         // Edit the URL so that http:// and https:// are no longer present
     var $url = $('<a>').attr('href', brewery.url).text(brewery.url)
 
-    // assign favorites state
-    var favState = brewery.isFavorite ? '★' : '☆'
+    // assign address text
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
-    
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
-    $favBtn.text(favState);
-    $card.data('id', brewery.id);
-    addDataAttr(brewery, $card);
     
-    // assign data id for lookup
-    // check if card id matches id of brewery in favorites[]
-    // set favorites start ⭐ state
+    // assign data attributes 
+    $card.data('id', brewery.id);
+    $card.data('meta', brewery);
+    
+    // assign favorites star ⭐ state
+    setFavState(brewery);
+    var favState = brewery.isFavorite ? '★' : '☆'
     $favBtn.text(favState);
     
     // append to appropriate parent elements
@@ -271,11 +291,16 @@ var makeRemainingResults = function(brewery, index) {
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
 
+    // assign data attributes 
+    $card.data('id', brewery.id);
+    $card.data('meta', brewery);
     
-    // assign data-* 'id'
-    $card.data('id', index)
+    // assign favorites star ⭐ state
+    setFavState(brewery);
+    var favState = brewery.isFavorite ? '★' : '☆'
+    $favBtn.text(favState);
+    
     // append to appropriate parent elements
-
     $imgWrapper.append($img, $favBtn);
     $addressWrapper.append($nameEl);
     $addressWrapper.append($separator);
@@ -289,9 +314,11 @@ var makeRemainingResults = function(brewery, index) {
 
 var submitBtnClicked = function (event) {
     event.preventDefault();
+    if ( event.target.matches('#favorites-button') ) {
+        return false;
+    }
     // TODO: - [ ] validate empty search field && return early if it is
-    console.log($('#search').val().trim());
-    var citySearched = $('#search').val();
+    var citySearched = $('#search').val().trim();
     callPositionAPI(citySearched);
 }
 
@@ -311,45 +338,25 @@ $('#search-form').submit(submitBtnClicked);
 $('#favorites-button').on("click",loadFavorites);
 
 $('main').on('click','.favorites', function() {
-    var currentText = $(this).html();
-    var starToggleText = (currentText === '☆') ? '★' : '☆'
-    $(this).text(starToggleText);
 
-    // card id
-    var breweryObject = $(this).parents('.brewery-card').data('meta');
-    // var cardId = $(this).parents('.brewery-card').data('id');
-    console.log('card meta:', breweryObject.id);
-
-    // on fav clicked; get related brewery; loop thru fav; 
-    // if brewery.id === fav[i].id; => remove fav[i] : fav.unshift(brewery)
-
+    // brewery meta data
+    var brewery = $(this).parents('.brewery-card').data('meta');
 
     // get item matching id
-    var breweryInFavorites = (id) => {
-        for (var brewery of favorites) {
-            if (brewery.id === id) {
-                return brewery;
-            }
-        }
-    }
-    var brewery = breweryInFavorites(breweryObject.id);
-    if (brewery) {
-        console.log('brewery in favorites, remove it', brewery);
+    if (brewery.isFavorite) {
+        // remove from favorites
+        favorites = favorites.filter(fav => fav.id !== brewery.id);
+        brewery.isFavorite = false;
+        $(this).text('☆')
     } else {
-        
-        favorites.unshift(breweryObject);
-        
+        // add to favorites (sorted by latestStarred=desc)
+        favorites.unshift(brewery);
+        brewery.isFavorite = true;
+        $(this).text('★')
     }
-    
     
     // Save fav array to local storage
     saveFavorites();
-
-    // Check if obj is in fav array
-    // var fav = favorites.filter( f => f.id === breweryObject.id);
-    // console.log('fav',fav);
-
-
 })
 
 loadFavorites();
