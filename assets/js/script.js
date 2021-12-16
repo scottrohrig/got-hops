@@ -1,8 +1,10 @@
-
 // Declare constants and variables
 
 var breweryArray = [];
 var favorites = [];
+const validCountries = ['US', 'IE', 'FR', 'GB'];
+const $modal = $('.modal');
+const $closeButton = $('.close-button');
 
 var imgs = [
     'mateusz-feliksik-1UDj1sTzmzQ-unsplash.jpg','mel-elias-eZZKqB4OPzk-unsplash.jpg', 'patrick-fore-5PRp-FvsI0Q-unsplash.jpg','patrick-fore-rrvAuudnAfg-unsplash.jpg',
@@ -11,28 +13,47 @@ var imgs = [
 ]
 
 // function to call the position API to gather the latitude and longitude of the user's search
-var callPositionAPI = function (city) {
-    var posApiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=94e32ddc97880c45b19a69dfc85aec8d`;
+var callPositionAPI = function (location) {
+    var posApiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=94e32ddc97880c45b19a69dfc85aec8d`;
     fetch(posApiCall)
-        .then(response => response.json())
-        .then(function (data) {
-            var cityLat = data[0].lat;
-            var cityLong = data[0].lon;
-            // pass brewery API function here with the lat and long values determined
-            callBreweryAPI(cityLat, cityLong);
-            updateMapFrameSrc(city);
-        });
+        .then(response => {
+            if(response.ok) {
+                response.json().then(function (data) {
+                    var lat = $(data).attr('lat');
+                    var long = $(data).attr('lon');
+                    var isValidCountry = validCountries.includes($(data).attr('country'));
+        
+                    // validate country for brewery API
+                    if(!isValidCountry) {
+                        showModal();
+                        return;
+                    }
+        
+                    // pass brewery API function here with the lat and long values determined
+                    callBreweryAPI(lat, long);
+                    updateMapFrameSrc(location);
+                });
+            }
+        })
+}
+
+// Function to show the modal when an invalid country is entered
+var showModal = function() {
+    $modal.addClass('show-modal').trigger('focus');
 }
 
 // function to call the brewery API where the latitude and longitude are passed into the API call to gather a list of nearby Breweries
 var callBreweryAPI = function (lat, long) {
     var breweryApiCall = `https://api.openbrewerydb.org/breweries?by_dist=${lat},${long}`;
     fetch(breweryApiCall)
-        .then(response => response.json())
-        .then(function (data) {
-            // console.log(data);
-            createResults(data);
-        });
+        .then(response => 
+            {
+                if(response.ok) {
+                    response.json().then(function (data) {
+                        createResults(data);
+                    });
+                }
+            });
 }
 
 var saveFavorites = function() {
@@ -49,12 +70,11 @@ var loadFavorites = function() {
     if (!tempArr) {
         return false;
     }
-    console.log(tempArr)
-    // add for loop here to remove null
+
+    // remove null items
     for (var i = 0; i < tempArr.length; i++) {
         if(!tempArr[i]) {
             tempArr.remove(i)
-            console.log(tempArr)
         }
     }
 
@@ -65,7 +85,6 @@ var loadFavorites = function() {
     // clear search input form
     $('#search').val('');
     showCards(favorites);
-
 }
 
 /**
@@ -73,21 +92,17 @@ var loadFavorites = function() {
  * @param {*} breweryDataArray 
  */
 var showCards = function(breweryDataArray) {
-      // clear result wrapper sections
-      $('#first-result').html('');
-      $('#results-wrapper').html('');
-      
-      // show first favorite 
-      makeFirstResult(breweryDataArray[0]);
-      
-  
-      // loop thru remaining (index 1 to n)
-      for (var i = 1; i < breweryDataArray.length; i++) {
-          // makeResult(breweryDataArray[i])
+    // clear result wrapper sections
+    $('#first-result').html('');
+    $('#results-wrapper').html('');
+    
+    // show first favorite 
+    makeFirstResult(breweryDataArray[0]);
 
+    // loop thru remaining (index 1 to n)
+    for (var i = 1; i < breweryDataArray.length; i++) {
         makeRemainingResults(breweryDataArray[i], i);
-
-      }
+    }
 }
 
 /**
@@ -98,7 +113,16 @@ var showCards = function(breweryDataArray) {
 var parseResults = function(resultsData) {
     var tempArr = [];
     for (let res of resultsData) {
-        tempArr.push(createBreweryObj(res));
+        res = createBreweryObj(res);
+        
+        // set favorites
+        favorites.forEach( item => { 
+            if ( res.id === item.id ) {
+                res.isFavorite = true;
+            }
+         })
+
+        tempArr.push(res);
     }
     return tempArr;
 }
@@ -109,14 +133,13 @@ var createResults = function(dataArray) {
         return false;
     } else {
         dataArray = parseResults(dataArray);
-    //setting the breweryarray to what comes in from search result data
+        // setting the brewery array to what comes in from search result data
         breweryArray = (dataArray);
     }
 
     showCards(dataArray);
 }
 
-// NOTE: this info is what we save to use for favorites, we don't need to do another fetch request
 /**
  * Returns a stripped and formatted brewery object
  * @param {Object} dataItem 
@@ -125,15 +148,16 @@ var createResults = function(dataArray) {
 var createBreweryObj = function (dataItem) {
     return {
         id:         dataItem.id,
-        name:       dataItem.name, // "Ale Industries"
-        type:       dataItem.brewery_type, // "micro"
+        name:       dataItem.name,
+        type:       dataItem.brewery_type,
         street:     dataItem.street,
         city:       dataItem.city,
         state:      dataItem.state,
         country:    dataItem.country,
         zip:        dataItem.postal_code,
-        phone:      dataItem.phone, // "9254705280"
-        url:        dataItem.website_url // "http://www.aleindustries.com"
+        phone:      dataItem.phone,
+        url:        dataItem.website_url,
+        isFavorite: false
     }
 }
 
@@ -144,19 +168,58 @@ var wrapImgs = function() {
 }
 
 /**
+ * assigns the card element a data attribute with the brewery id checks if id is in favorites and sets the brewery.isFavorite accordingly
+ * @param {Object} brewery 
+ * @param {$Object} $card
+ */
+var addDataAttr = function(brewery, $card) {
+
+    $card.data('meta', brewery);
+
+}
+
+/**
+ * toggles the brewery's isFavorite boolean value.
+ * @param {Object} brewery 
+ * @returns 
+ */
+var setFavState = function(brewery) {
+    // match brewery with favs[i]
+    var fav = getFavorite(brewery);
+    if ( fav.id === brewery.id ) {
+        brewery.isFavorite = false;
+        return
+    }
+    brewery.isFavorite = true;
+}
+
+/**
+ * Given a brewery object, returns the matching favorites object, otherwise the brewery obj.
+ * @param {Oject} brewery 
+ * @returns 
+ */
+var getFavorite = function(brewery) {
+    var fav = favorites.filter( favorite => favorite.id === brewery.id );
+
+    if ( fav.length ) {
+        return fav;
+    }
+    return brewery
+}
+
+
+/**
  * ### Creates first result card elements from given brewery info
  * @param {Object} breweryDataObj 
  */
 var makeFirstResult = function (brewery) {
 
-
     const imgSource = `./assets/images/${wrapImgs()}`;
     
     // create elements & assign classes
-
     var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3").data('id', 0);
     var $imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44");
-    var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2").text('☆');
+    var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2");
     var $img = $('<img>').addClass("absolute h-full w-full object-cover").attr({
         'src': imgSource,
         'alt': brewery.name
@@ -168,14 +231,21 @@ var makeFirstResult = function (brewery) {
     var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone);
     // TODO:
         // Edit the URL so that http:// and https:// are no longer present
-    var $url = $('<a>').attr('href', brewery.url).text(brewery.url)
+    var $url = $('<a>').attr('href', brewery.url).attr( 'target', '_blank').text(brewery.url)
 
+    // assign address text
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
-
     
-    // assign data-* 'id'
-    $card.data('id', 0);
+    // assign data attributes 
+    $card.data('id', brewery.id);
+    $card.data('meta', brewery);
+    
+    // assign favorites star ⭐ state
+    setFavState(brewery);
+    var favState = brewery.isFavorite ? '★' : '☆'
+    $favBtn.text(favState);
+    
     // append to appropriate parent elements
     $imgWrapper.append($img, $favBtn);
     $addressWrapper.append($nameEl);
@@ -188,9 +258,6 @@ var makeFirstResult = function (brewery) {
 }
 
 var makeRemainingResults = function(brewery, index) {
-
-    // return early to prevent added errors
-    // return false;
 
     const imgSource = `./assets/images/${wrapImgs()}`;
     
@@ -207,16 +274,21 @@ var makeRemainingResults = function(brewery, index) {
     var $separator = $("<hr>").addClass("border-yellow-800 my-1");
     var $contactWrapper = $('<div>').addClass("mt-2 text-yellow-700 text-xs uppercase font-semibold");
     var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone);
-    var $url = $('<a>').attr('href', brewery.url).text(brewery.url);
+    var $url = $('<a>').attr('href', brewery.url).attr( 'target', '_blank').text(brewery.url);
 
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
 
+    // assign data attributes 
+    $card.data('id', brewery.id);
+    $card.data('meta', brewery);
     
-    // assign data-* 'id'
-    $card.data('id', index)
+    // assign favorites star ⭐ state
+    setFavState(brewery);
+    var favState = brewery.isFavorite ? '★' : '☆'
+    $favBtn.text(favState);
+    
     // append to appropriate parent elements
-
     $imgWrapper.append($img, $favBtn);
     $addressWrapper.append($nameEl);
     $addressWrapper.append($separator);
@@ -230,15 +302,25 @@ var makeRemainingResults = function(brewery, index) {
 
 var submitBtnClicked = function (event) {
     event.preventDefault();
-    // TODO: - [ ] validate empty search field && return early if it is
-    console.log($('#search').val().trim());
-    var citySearched = $('#search').val();
+    if ( event.target.matches('#favorites-button') ) {
+        return false;
+    }
+    var citySearched = $('#search').val().trim();
+    if(!citySearched) {
+        $('#search').val('');
+        return;
+    }
+    else if (/\d/.test(citySearched)) {
+        $('#search').val('');
+        showModal();
+        return;
+    }
+    $('#search').val('');
     callPositionAPI(citySearched);
 }
 
 var updateMapFrameSrc = function (location) {
     var $src = $('#map-canvas');
-    console.log($src.attr('src'));
     var location = location.split(" ").join("");
     var regEx = /q=[\D\s]*(?=&)/g;
     var srcText = $src
@@ -252,23 +334,39 @@ $('#search-form').submit(submitBtnClicked);
 $('#favorites-button').on("click",loadFavorites);
 
 $('main').on('click','.favorites', function() {
-    var currentText = $(this).html();
-    var starToggleText = (currentText === '☆') ? '★' : '☆'
-    $(this).text(starToggleText);
 
-    // card id
-    var cardId = $(this).parents('.brewery-card').data('id');
-    console.log('card id:', cardId);
+    // brewery meta data
+    var brewery = $(this).parents('.brewery-card').data('meta');
 
-    // Check if obj is in fav array
-    if (favorites.includes(breweryArray[cardId])) {
-        favorites.remove(cardId);
+    // get item matching id
+    if (brewery.isFavorite) {
+        // remove from favorites
+        favorites = favorites.filter(fav => fav.id !== brewery.id);
+        brewery.isFavorite = false;
+        $(this).text('☆')
     } else {
-        favorites.unshift(breweryArray[cardId]);
+        // add to favorites (sorted by latestStarred=desc)
+        favorites.unshift(brewery);
+        brewery.isFavorite = true;
+        $(this).text('★')
     }
-
+    
     // Save fav array to local storage
     saveFavorites();
 })
 
 loadFavorites();
+
+// event listeners for click and escape key press
+$closeButton.on('click', function() {
+    $modal.removeClass('show-modal');
+});
+
+$(document).keydown(function(e) { 
+    if (e.keyCode === 27) {
+        // add a check to see if the modal already has a show-modal class
+        if($modal.hasClass('show-modal')) {
+            $modal.removeClass('show-modal')
+        }
+    } 
+});
