@@ -1,8 +1,11 @@
-
 // Declare constants and variables
 
 var breweryArray = [];
 var favorites = [];
+const validCountries = ['US', 'IE', 'FR', 'GB'];
+// make id instead of class
+const $modal = $('.modal');
+const $closeButton = $('.close-button');
 
 var imgs = [
     'mateusz-feliksik-1UDj1sTzmzQ-unsplash.jpg','mel-elias-eZZKqB4OPzk-unsplash.jpg', 'patrick-fore-5PRp-FvsI0Q-unsplash.jpg','patrick-fore-rrvAuudnAfg-unsplash.jpg',
@@ -18,10 +21,24 @@ var callPositionAPI = function (city) {
         .then(function (data) {
             var cityLat = data[0].lat;
             var cityLong = data[0].lon;
+            var isValidCountry = validCountries.includes(data[0].country);
+
+            // validate country for brewery API
+            if(!isValidCountry) {
+                console.log("A valid country was not chosen");
+                showModal();
+                return;
+            }
+
             // pass brewery API function here with the lat and long values determined
             callBreweryAPI(cityLat, cityLong);
             updateMapFrameSrc(city);
         });
+}
+
+// Function to show the modal when an invalid country is entered
+var showModal = function() {
+    $modal.addClass('show-modal').trigger('focus');
 }
 
 // function to call the brewery API where the latitude and longitude are passed into the API call to gather a list of nearby Breweries
@@ -49,14 +66,22 @@ var loadFavorites = function() {
     if (!tempArr) {
         return false;
     }
+    console.log(tempArr)
+    // add for loop here to remove null
+    for (var i = 0; i < tempArr.length; i++) {
+        if(!tempArr[i]) {
+            tempArr.remove(i)
+            console.log(tempArr)
+        }
+    }
 
     // assign to favorites array
     favorites = tempArr;
+    breweryArray = tempArr;
 
     // clear search input form
     $('#search').val('');
     showCards(favorites);
-
 }
 
 /**
@@ -261,3 +286,19 @@ $('main').on('click','.favorites', function() {
     // Save fav array to local storage
     saveFavorites();
 })
+
+loadFavorites();
+
+// event listeners for click and escape key press
+$closeButton.on('click', function() {
+    $modal.removeClass('show-modal');
+});
+
+$(document).keydown(function(e) { 
+    if (e.keyCode === 27) {
+        // add a check to see if the modal already has a show-modal class
+        if($modal.hasClass('show-modal')) {
+            $modal.removeClass('show-modal')
+        }
+    } 
+});

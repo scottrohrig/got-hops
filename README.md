@@ -42,7 +42,6 @@ So that I can find nearby ones, but also ones that are off the grid and not as w
 
 ![desktop-demo](./assets/images/demo-desktop.gif)
 
-
 ## Built with
 ![badge size](https://img.shields.io/badge/-HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white&logoWidth=30)
 ![badge size](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
