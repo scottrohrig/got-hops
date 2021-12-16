@@ -41,13 +41,6 @@ var callPositionAPI = function (location) {
 
 // Function to show the modal when an invalid country is entered
 var showModal = function() {
-    // h1Countries = $('<h1>');
-    // h1Countries.text('Please enter a city in the U.S, Ireland, England, Scotland, or France.');
-
-    // h1BlankSearch = $('<h1>');
-    // h1BlankSearch.text('Plea')
-
-    // $('.modal-content').append($(h1Countries))
     $modal.addClass('show-modal').trigger('focus');
 }
 
