@@ -148,15 +148,15 @@ var createResults = function(dataArray) {
 var createBreweryObj = function (dataItem) {
     return {
         id:         dataItem.id,
-        name:       dataItem.name, // "Ale Industries"
-        type:       dataItem.brewery_type, // "micro"
+        name:       dataItem.name,
+        type:       dataItem.brewery_type,
         street:     dataItem.street,
         city:       dataItem.city,
         state:      dataItem.state,
         country:    dataItem.country,
         zip:        dataItem.postal_code,
-        phone:      dataItem.phone, // "9254705280"
-        url:        dataItem.website_url, // "http://www.aleindustries.com"
+        phone:      dataItem.phone,
+        url:        dataItem.website_url,
         isFavorite: false
     }
 }
@@ -214,11 +214,9 @@ var getFavorite = function(brewery) {
  */
 var makeFirstResult = function (brewery) {
 
-
     const imgSource = `./assets/images/${wrapImgs()}`;
     
     // create elements & assign classes
-
     var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3").data('id', 0);
     var $imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44");
     var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2");
@@ -260,9 +258,6 @@ var makeFirstResult = function (brewery) {
 }
 
 var makeRemainingResults = function(brewery, index) {
-
-    // return early to prevent added errors
-    // return false;
 
     const imgSource = `./assets/images/${wrapImgs()}`;
     
