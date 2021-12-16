@@ -14,30 +14,40 @@ var imgs = [
 ]
 
 // function to call the position API to gather the latitude and longitude of the user's search
-var callPositionAPI = function (city) {
-    var posApiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=94e32ddc97880c45b19a69dfc85aec8d`;
+var callPositionAPI = function (location) {
+    var posApiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=94e32ddc97880c45b19a69dfc85aec8d`;
     fetch(posApiCall)
-        .then(response => response.json())
-        .then(function (data) {
-            var cityLat = data[0].lat;
-            var cityLong = data[0].lon;
-            var isValidCountry = validCountries.includes(data[0].country);
-
-            // validate country for brewery API
-            if(!isValidCountry) {
-                console.log("A valid country was not chosen");
-                showModal();
-                return;
+        .then(response => {
+            if(response.ok) {
+                response.json().then(function (data) {
+                    var lat = $(data).attr('lat');
+                    var long = $(data).attr('lon');
+                    var isValidCountry = validCountries.includes($(data).attr('country'));
+        
+                    // validate country for brewery API
+                    if(!isValidCountry) {
+                        console.log("A valid country was not chosen");
+                        showModal();
+                        return;
+                    }
+        
+                    // pass brewery API function here with the lat and long values determined
+                    callBreweryAPI(lat, long);
+                    updateMapFrameSrc(location);
+                });
             }
-
-            // pass brewery API function here with the lat and long values determined
-            callBreweryAPI(cityLat, cityLong);
-            updateMapFrameSrc(city);
-        });
+        })
 }
 
 // Function to show the modal when an invalid country is entered
 var showModal = function() {
+    // h1Countries = $('<h1>');
+    // h1Countries.text('Please enter a city in the U.S, Ireland, England, Scotland, or France.');
+
+    // h1BlankSearch = $('<h1>');
+    // h1BlankSearch.text('Plea')
+
+    // $('.modal-content').append($(h1Countries))
     $modal.addClass('show-modal').trigger('focus');
 }
 
@@ -247,8 +257,17 @@ var makeRemainingResults = function(brewery, index) {
 var submitBtnClicked = function (event) {
     event.preventDefault();
     // TODO: - [ ] validate empty search field && return early if it is
-    console.log($('#search').val().trim());
-    var citySearched = $('#search').val();
+    var citySearched = $('#search').val().trim();
+    if(!citySearched) {
+        $('#search').val('');
+        return;
+    }
+    else if (/\d/.test(citySearched)) {
+        $('#search').val('');
+        showModal();
+        return;
+    }
+    $('#search').val('');
     callPositionAPI(citySearched);
 }
 
