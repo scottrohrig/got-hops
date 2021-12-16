@@ -3,7 +3,6 @@
 var breweryArray = [];
 var favorites = [];
 const validCountries = ['US', 'IE', 'FR', 'GB'];
-// make id instead of class
 const $modal = $('.modal');
 const $closeButton = $('.close-button');
 
@@ -26,7 +25,6 @@ var callPositionAPI = function (location) {
         
                     // validate country for brewery API
                     if(!isValidCountry) {
-                        console.log("A valid country was not chosen");
                         showModal();
                         return;
                     }
@@ -48,11 +46,14 @@ var showModal = function() {
 var callBreweryAPI = function (lat, long) {
     var breweryApiCall = `https://api.openbrewerydb.org/breweries?by_dist=${lat},${long}`;
     fetch(breweryApiCall)
-        .then(response => response.json())
-        .then(function (data) {
-            // console.log(data);
-            createResults(data);
-        });
+        .then(response => 
+            {
+                if(response.ok) {
+                    response.json().then(function (data) {
+                        createResults(data);
+                    });
+                }
+            });
 }
 
 var saveFavorites = function() {
@@ -69,16 +70,11 @@ var loadFavorites = function() {
     if (!tempArr) {
         return false;
     }
-    // console.log(tempArr)
 
-    // TODO: [ ] validate using brewery.id
-
-
-    // add for loop here to remove null
+    // remove null items
     for (var i = 0; i < tempArr.length; i++) {
         if(!tempArr[i]) {
             tempArr.remove(i)
-            console.log(tempArr)
         }
     }
 
@@ -96,21 +92,17 @@ var loadFavorites = function() {
  * @param {*} breweryDataArray 
  */
 var showCards = function(breweryDataArray) {
-      // clear result wrapper sections
-      $('#first-result').html('');
-      $('#results-wrapper').html('');
-      
-      // show first favorite 
-      makeFirstResult(breweryDataArray[0]);
-      
-  
-      // loop thru remaining (index 1 to n)
-      for (var i = 1; i < breweryDataArray.length; i++) {
-          // makeResult(breweryDataArray[i])
+    // clear result wrapper sections
+    $('#first-result').html('');
+    $('#results-wrapper').html('');
+    
+    // show first favorite 
+    makeFirstResult(breweryDataArray[0]);
 
+    // loop thru remaining (index 1 to n)
+    for (var i = 1; i < breweryDataArray.length; i++) {
         makeRemainingResults(breweryDataArray[i], i);
-
-      }
+    }
 }
 
 /**
@@ -141,14 +133,13 @@ var createResults = function(dataArray) {
         return false;
     } else {
         dataArray = parseResults(dataArray);
-    //setting the breweryarray to what comes in from search result data
+        // setting the brewery array to what comes in from search result data
         breweryArray = (dataArray);
     }
 
     showCards(dataArray);
 }
 
-// NOTE: this info is what we save to use for favorites, we don't need to do another fetch request
 /**
  * Returns a stripped and formatted brewery object
  * @param {Object} dataItem 
@@ -166,7 +157,7 @@ var createBreweryObj = function (dataItem) {
         zip:        dataItem.postal_code,
         phone:      dataItem.phone, // "9254705280"
         url:        dataItem.website_url, // "http://www.aleindustries.com"
-        isFavorite: false  // TODO: make this a function comparing if dataItem.id matches any favorited brewery's id.
+        isFavorite: false
     }
 }
 
@@ -213,7 +204,6 @@ var getFavorite = function(brewery) {
     if ( fav.length ) {
         return fav;
     }
-    console.log('fav not found:')
     return brewery
 }
 
@@ -243,7 +233,7 @@ var makeFirstResult = function (brewery) {
     var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone);
     // TODO:
         // Edit the URL so that http:// and https:// are no longer present
-    var $url = $('<a>').attr('href', brewery.url).text(brewery.url)
+    var $url = $('<a>').attr('href', brewery.url).attr( 'target', '_blank').text(brewery.url)
 
     // assign address text
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
@@ -289,7 +279,7 @@ var makeRemainingResults = function(brewery, index) {
     var $separator = $("<hr>").addClass("border-yellow-800 my-1");
     var $contactWrapper = $('<div>').addClass("mt-2 text-yellow-700 text-xs uppercase font-semibold");
     var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone);
-    var $url = $('<a>').attr('href', brewery.url).text(brewery.url);
+    var $url = $('<a>').attr('href', brewery.url).attr( 'target', '_blank').text(brewery.url);
 
     var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
@@ -320,7 +310,6 @@ var submitBtnClicked = function (event) {
     if ( event.target.matches('#favorites-button') ) {
         return false;
     }
-    // TODO: - [ ] validate empty search field && return early if it is
     var citySearched = $('#search').val().trim();
     if(!citySearched) {
         $('#search').val('');
@@ -337,7 +326,6 @@ var submitBtnClicked = function (event) {
 
 var updateMapFrameSrc = function (location) {
     var $src = $('#map-canvas');
-    console.log($src.attr('src'));
     var location = location.split(" ").join("");
     var regEx = /q=[\D\s]*(?=&)/g;
     var srcText = $src
