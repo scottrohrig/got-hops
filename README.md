@@ -1,7 +1,6 @@
 # Got-Hops
 A craft brewery search application
 
-
 ## Table of contects
 
 - [Description](#description)
@@ -14,13 +13,6 @@ A craft brewery search application
 
 ## Description
 Given a "Beer Dashboard" with form inputs, when I search for a city. I am presented with a list of nearby breweries. When I click the search button the closest brewery is displayed followed by a list of other breweries. When I click on a brewery, I am presented with a details of the brewery. When I click on a starred brewery recommended by others I can add it to my favorites and the favorites are stored to local storage. 
-
-## Preview
-### -Header
-### -Search
-### -Results
-### -Map
-### -Favorites
 
 ## User Story
 As an avid connoisseur of crafted beer from around the world.
@@ -41,18 +33,6 @@ So that I can find nearby ones, but also ones that are off the grid and not as w
 ![mobile-preview](./assets/images/preview-mobile.png)
 
 ![desktop-demo](./assets/images/demo-desktop.gif)
-
-## Wire Frame
-
-Header
-Search 
-Results
-Map 
-Favorites
-
-## Website
-
-[View Live Site](#got-hops)
 
 ## Built With
 ![html](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white&logoWidth=30)
