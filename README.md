@@ -28,7 +28,7 @@ I want a web application that finds nearby breweries with pricing and a list of 
 So that I can find nearby ones, but also ones that are off the grid and not as well known.
 
 ## Website
-[View Live Site](#got-hops)
+[View Live Site](https://scottrohrig.github.io/got-hops/)
 
 ## Contributions
 <details>
@@ -42,10 +42,22 @@ So that I can find nearby ones, but also ones that are off the grid and not as w
 
 ![desktop-demo](./assets/images/demo-desktop.gif)
 
-## Built with
-![badge size](https://img.shields.io/badge/-HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white&logoWidth=30)
-![badge size](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![badge size](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white)
-![badge size](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![badge size](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![vs code badge](https://img.shields.io/badge/-VS_Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white&logo-width=30)
+## Wire Frame
+
+Header
+Search 
+Results
+Map 
+Favorites
+
+## Website
+
+[View Live Site](#got-hops)
+
+## Built With
+![html](https://img.shields.io/badge/-HTML5-E34F26?logo=html5&logoColor=white&logoWidth=30)
+![css](https://img.shields.io/badge/-CSS3-1572B6?logo=css3&logoColor=white&logoWidth=30)
+![js](https://img.shields.io/badge/-JavaScript-F7DF1E?logo=javascript&logoColor=white&logoWidth=30)
+![jquery](https://img.shields.io/badge/-jQuery-0769AD?logo=jquery&logoColor=white&logoWidth=30)
+![tailwind-css](https://img.shields.io/badge/-Tailwind%20CSS-06B6D4?logo=tailwind-css&logoColor=white&logoWidth=30)
+
