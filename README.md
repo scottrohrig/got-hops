@@ -61,4 +61,4 @@ SO THAT I can find nearby ones, but also ones that are off the grid and not as w
 ![jquery](https://img.shields.io/badge/-jQuery-0769AD?logo=jquery&logoColor=white&logoWidth=30)
 ![tailwind-css](https://img.shields.io/badge/-Tailwind%20CSS-06B6D4?logo=tailwind-css&logoColor=white&logoWidth=30)
 
-&copy; 2021 
+&copy; 2021 Mianta McKight, Alex Marten, Scott Rohrig | All Rights Reserved
