@@ -208,6 +208,30 @@ var getFavorite = function(brewery) {
 }
 
 
+var formatPhone = function(number) {
+    // check length
+    if ( !number) {
+        return '';
+    }
+    if ( number.length > 10) {
+        var cc = number.substring(0,1);
+        var area = number.substring(1,4);
+        number =  `+${cc} (${area}) ${number.substring(4,7)}-${number.substring(7,number.length)}`;
+        return number;
+    } 
+       
+    return `(${number.substring(0,3)}) ${number.substring(3,6)}-${number.substring(6,number.length)}`;
+}
+
+var formatUrl = function(breweryUrl) {
+    if (!breweryUrl) {
+        return '';
+    }
+    let regex = /.*www.|.*\/\//
+    return breweryUrl.replace(regex, '')
+}
+
+
 /**
  * ### Creates first result card elements from given brewery info
  * @param {Object} breweryDataObj 
@@ -228,13 +252,19 @@ var makeFirstResult = function (brewery) {
     var $nameEl = $('<h3>').addClass("mt-1 text-yellow-800 leading-tight truncate text-2xl").text(brewery.name);
     var $separator = $("<hr>").addClass("border-yellow-900");
     var $contactWrapper = $('<div>').addClass("mt-2 text-yellow-700 text-xs uppercase font-semibold");
-    var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone);
+    var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(formatPhone(brewery.phone));
     // TODO:
         // Edit the URL so that http:// and https:// are no longer present
-    var $url = $('<a>').attr('href', brewery.url).attr( 'target', '_blank').text(brewery.url)
+    var $url = $('<a>').attr('href', brewery.url).attr( 'target', '_blank').text(formatUrl(brewery.url))
 
     // assign address text
-    var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
+    // var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
+
+
+    var deets = [brewery.street,brewery.city,brewery.state,brewery.country]
+    deets = deets.filter(deet => deet !== null)
+    
+    var addressText = deets.join(', ') + brewery.zip || ''
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
     
     // assign data attributes 
@@ -250,7 +280,11 @@ var makeFirstResult = function (brewery) {
     $imgWrapper.append($img, $favBtn);
     $addressWrapper.append($nameEl);
     $addressWrapper.append($separator);
-    $contactWrapper.append($phoneEl, ' &bull; ', $url);
+    if (!brewery.phone || !brewery.url) {
+        $contactWrapper.append($phoneEl, $url);
+    } else {
+        $contactWrapper.append($phoneEl, ' &bull; ', $url);
+    }
     $addressWrapper.append($contactWrapper);
     $addressWrapper.append($addressEl);
     $card.append($imgWrapper, $addressWrapper);
@@ -273,10 +307,16 @@ var makeRemainingResults = function(brewery, index) {
     var $nameEl = $('<h3>').addClass("brewery-name inline text-2xl").text(brewery.name);
     var $separator = $("<hr>").addClass("border-yellow-800 my-1");
     var $contactWrapper = $('<div>').addClass("mt-2 text-yellow-700 text-xs uppercase font-semibold");
-    var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(brewery.phone);
-    var $url = $('<a>').attr('href', brewery.url).attr( 'target', '_blank').text(brewery.url);
+    var $phoneEl = $('<a>').attr('href', 'tel:' + brewery.phone).text(formatPhone(brewery.phone));
+    var $url = $('<a>').attr('href', brewery.url).addClass('underline lowercase text-blue-500 visited:text-blue-900').attr( 'target', '_blank').text(formatUrl(brewery.url));
 
-    var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
+    // var addressText = `${brewery.street || ''}, ${brewery.city || ''}, ${brewery.state || ''}, ${brewery.country || ''} ${brewery.zip}`;
+
+    
+    var deets = [brewery.street,brewery.city,brewery.state,brewery.country]
+    deets = deets.filter(deet => deet !== null)
+    
+    var addressText = deets.join(', ') + brewery.zip || ''
     var $addressEl = $('<div>').addClass("text-yellow-700 text-xs uppercase").text(addressText);
 
     // assign data attributes 
@@ -292,7 +332,11 @@ var makeRemainingResults = function(brewery, index) {
     $imgWrapper.append($img, $favBtn);
     $addressWrapper.append($nameEl);
     $addressWrapper.append($separator);
-    $contactWrapper.append($phoneEl, ' &bull; ', $url);
+    if (!brewery.phone || !brewery.url) {
+        $contactWrapper.append($phoneEl, $url);
+    } else {
+        $contactWrapper.append($phoneEl, ' &bull; ', $url);
+    }
     $addressWrapper.append($contactWrapper);
     $addressWrapper.append($addressEl);
     $card.append($imgWrapper, $addressWrapper);
