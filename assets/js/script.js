@@ -12,6 +12,15 @@ var imgs = [
     'pradnyal-gandhi-1MqDCpA-2hU-unsplash.jpg'
 ]
 
+// function to clear local storage if nothing is in the favorites in local storage. This is to prevent errors when refreshing the page after removing all favorites
+var clearLocalStorage = function() {
+    let favorites = JSON.parse(localStorage.getItem('favorites'));
+    if(!favorites || favorites.length === 0 ) {
+        localStorage.removeItem('favorites')
+    }
+}
+clearLocalStorage();
+
 // function to call the position API to gather the latitude and longitude of the user's search
 var callPositionAPI = function (location) {
     var posApiCall = `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=94e32ddc97880c45b19a69dfc85aec8d`;
@@ -207,7 +216,6 @@ var getFavorite = function(brewery) {
     return brewery
 }
 
-
 var formatPhone = function(number) {
     // check length
     if ( !number) {
@@ -231,7 +239,6 @@ var formatUrl = function(breweryUrl) {
     return breweryUrl.replace(regex, '')
 }
 
-
 /**
  * ### Creates first result card elements from given brewery info
  * @param {Object} breweryDataObj 
@@ -243,7 +250,7 @@ var makeFirstResult = function (brewery) {
     // create elements & assign classes
     var $card = $('<div>').addClass("brewery-card w-full bg-yellow-300 lg:bg-gray-100 rounded-lg overflow-hidden lg:p-2 lg:flex lg:basis-1/3").data('id', 0);
     var $imgWrapper = $('<div>').addClass("first-img relative lg:rounded overflow-hidden lg:h-44");
-    var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-2xl uppercase px-2");
+    var $favBtn = $('<button>').addClass("favorites absolute left-1 inline-block  text-yellow-300 text-4xl uppercase px-2");
     var $img = $('<img>').addClass("absolute h-full w-full object-cover").attr({
         'src': imgSource,
         'alt': brewery.name
