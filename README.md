@@ -40,7 +40,7 @@ SO THAT I can find nearby ones, but also ones that are off the grid and not as w
   
 [View Live Site](https://scottrohrig.github.io/got-hops/)
 
-## Contributions
+## Credits
 
 <details>
 
